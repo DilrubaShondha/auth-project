@@ -1,42 +1,30 @@
-// import React, { useContext } from 'react';
+import React, { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-// import { AuthContext } from '../providers/AuthProvider';
+import { AuthContext } from '../Providers/AuthProvider';
 
 const Login = () => {
-    const handleLogin = (event) =>{
+    const navigate = useNavigate(); // Initialize navigate
+    const { signInUser } = useContext(AuthContext); // Get signInUser from context
+
+    const handleLogin = (event) => {
         event.preventDefault();
-        const email =event.target.email.value;
-        const password =event.target.password.value;
-        console.log(email,password);
-    }
-    // const navigate = useNavigate();
-    // const { signInUser, signInWithGoogle } = useContext(AuthContext);
+        const email = event.target.email.value;
+        const password = event.target.password.value;
 
-    // const handleLogin = e => {
-    //     e.preventDefault();
-    //     const email = e.target.email.value;
-    //     const password = e.target.password.value;
+        signInUser(email, password)
+            .then(result => {
+                event.target.reset(); // Use event instead of e
+                navigate('/'); // Navigate to home
+            })
+            .catch(error => {
+                console.log('ERROR', error.message);
+            });
+    };
 
-    //     console.log(email, password);
-    //     signInUser(email, password)
-    //         .then(result => {
-    //             console.log(result.user);
-    //             e.target.reset();
-    //             navigate('/')
-    //         })
-    //         .catch(error => {
-    //             console.log('ERROR', error.message)
-    //         })
-    // }
-
-    // const handleGoogleSignIn = () => {
-    //     signInWithGoogle()
-    //         .then(result => {
-    //             console.log(result.user);
-    //             navigate('/');
-    //         })
-    //         .catch(error => console.log('ERROR', error.message))
-    // }
+    const handleGoogleSignIn = () => {
+        // Add functionality for Google sign-in if implemented in context
+        console.log('Google Sign-In button clicked!');
+    };
 
     return (
         <div className="hero bg-base-200 min-h-screen">
@@ -50,26 +38,42 @@ const Login = () => {
                             <label className="label">
                                 <span className="label-text">Email</span>
                             </label>
-                            <input type="email" name="email" placeholder="email" className="input input-bordered" required />
+                            <input
+                                type="email"
+                                name="email"
+                                placeholder="email"
+                                className="input input-bordered"
+                                required
+                            />
                         </div>
                         <div className="form-control">
                             <label className="label">
                                 <span className="label-text">Password</span>
                             </label>
-                            <input type="password" name="password" placeholder="password" className="input input-bordered" required />
+                            <input
+                                type="password"
+                                name="password"
+                                placeholder="password"
+                                className="input input-bordered"
+                                required
+                            />
                             <label className="label">
-                                <a href="#" className="label-text-alt link link-hover">Forgot password?</a>
+                                <a href="#" className="label-text-alt link link-hover">
+                                    Forgot password?
+                                </a>
                             </label>
                         </div>
                         <div className="form-control mt-6">
                             <button className="btn btn-primary">Login</button>
                         </div>
                     </form>
-                    <p className='ml-4 mb-4'>
-                        New to this website? please <Link to="/register">Register</Link>
+                    <p className="ml-4 mb-4">
+                        New to this website? Please <Link to="/register">Register</Link>.
                     </p>
                     <p>
-                        <button  className='btn btn-ghost'>Google</button>
+                        <button  className="btn btn-ghost">
+                            Sign in with Google
+                        </button>
                     </p>
                 </div>
             </div>
